@@ -1,3 +1,6 @@
+<?php
+include('config.php');
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -28,7 +31,7 @@
 
                 </p>
                 <p>
-                <h3>วิธีการอัพโหลดรูป</h3>
+                <h4>วิธีการอัพโหลดรูป</h4>
                 <div class="text-center mb-3">
                     1. กดปุ่ม Choose files <br />
                     2. เลือกรูปที่ต้องการ Upload (สามารถเลือกหลายรูปภาพพร้อมกันได้)<br />
@@ -37,7 +40,31 @@
                 </div>
                 </p>
             </div> <br />
-            <br />
+            <?php 
+                //Station 
+                $s = $mysqli->query("SELECT * FROM `tbl_station` WHERE tbl_station.stationId = '{$_GET["sid"]}' ");
+                $station = $s->fetch_assoc();           
+
+                // Detail Select option Choice
+                $sql=  "SELECT tbl_station_case.*,tbl_station_list.station_title FROM
+                    tbl_station_case
+                    INNER JOIN tbl_station_list ON tbl_station_list.listId = tbl_station_case.listId
+                    WHERE
+                    tbl_station_case.caseId = '{$_GET["caseId"]}' ";
+
+                $q = $mysqli->query($sql);
+                $rows = $q->fetch_assoc();                    
+
+            $casetitle = str_replace(' ','',$rows["case_title"]);
+            $name = $_GET["caseId"].$casetitle."_station".$_GET["sid"].'list'.$_GET["listId"]; 
+
+            //ตั้งชื่อ folder มาก่อนแล้วจะปรับให้ตรงกับที่เลือกมาครับ 
+            $folderName ="myimages";
+            ?>
+            <hr />
+            <h4 class="text-center mt-2 p-b-3"> <?= $station["stationName"]?> / <?=$rows["station_title"]?> <br />
+                <?=$rows["case_title"]?></h4>
+
             <div class="imageUpload mt-2">
                 <input type="file" class="inp" onchange="getImageData(event)" multiple />
                 <button onclick="selectImage()" class="selectImage">
@@ -56,6 +83,7 @@
             </div>
         </div>
     </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
     </script>
@@ -120,11 +148,11 @@
             }
         }
     };
-
+    console.log(<?=$name?>);
     const uploadProcess = (file, fileName) => {
         return new Promise((resolve, reject) => {
             // Folder on ferebase / myimages
-            const storageRef = storage.ref().child("myimages");
+            const storageRef = storage.ref().child("<?=$folderName?>");
             const folderRef = storageRef.child(fileName);
             const uploadtask = folderRef.put(file);
             uploadtask.on(

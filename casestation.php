@@ -45,6 +45,8 @@ include('config.php');
                             tbl_station_case.listId = '{$_GET["listId"]}'
                             ";
                         $q = $mysqli->query($sql);
+
+
                         while($row =  $q->fetch_assoc()){?>
                         <a class="btn btn-primary mx-2" style="min-width: 150px;background: violet;color: #000;"
                             href="upload.php?sid=<?=$_GET["sid"]?>&listId=<?=$row["listId"]?>&caseId=<?=$row["caseId"]?>&case_title=<?=$row["case_title"]?>"
