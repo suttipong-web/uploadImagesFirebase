@@ -7,7 +7,7 @@
 }
 .progressBar{
     width: 250px;
-    background: rgb(196, 193, 193);
+    background: #FFF;
     padding: 15px 20px;
     position: relative;
 }
@@ -80,7 +80,7 @@ body{
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background: linear-gradient(360deg,rgb(21, 119, 240),rgb(131, 16, 114));
+    background: #FFF;
 }
 .loading{
     display: none;
