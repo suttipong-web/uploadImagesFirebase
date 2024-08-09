@@ -22,7 +22,7 @@ include('config.php');
 <body>
     <div class="container">
         <div class="row col-md-12 justify-content-center">
-            <div class="text-center text-withe pt-5">
+            <div class="text-center text-withe pt-5 w-75">
                 <h2 class="text-center">
                     <img src="images/estima-logo.png" style="width: 350px; margin: auto;" />
                 </h2>
@@ -48,7 +48,7 @@ include('config.php');
 
 
                         while($row =  $q->fetch_assoc()){?>
-                        <a class="btn btn-primary mx-2" style="min-width: 150px;background: violet;color: #000;"
+                        <a class="btn btn-primary mx-2 mb-3" style="min-width: 155px;background: violet;color: #000;"
                             href="upload.php?sid=<?=$_GET["sid"]?>&listId=<?=$row["listId"]?>&caseId=<?=$row["caseId"]?>&case_title=<?=$row["case_title"]?>"
                             role="button"><?=$row["case_title"]?></a>
                         <?php }?>

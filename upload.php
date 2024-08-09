@@ -10,7 +10,7 @@ include('config.php');
     <title>Upload Images Project CMU-Research</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
-    <link rel="stylesheet" href="./index.css" />
+    <link rel="stylesheet" href="index.css" />
     <!-- Import Firebase scripts cdn -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
@@ -20,7 +20,7 @@ include('config.php');
 </head>
 
 <body>
-    <div class="container">
+    <div class="container mb-5">
         <div class="row col-md-12 justify-content-center">
             <div class="text-center text-withe pt-5">
                 <h2 class="text-center">
@@ -57,9 +57,11 @@ include('config.php');
 
             $casetitle = str_replace(' ','',$rows["case_title"]);
             $name = $_GET["caseId"].$casetitle."_station".$_GET["sid"].'list'.$_GET["listId"]; 
-
+            $code = $_GET["sid"].'_'.$_GET["listId"].'_'.$casetitle;
             //ตั้งชื่อ folder มาก่อนแล้วจะปรับให้ตรงกับที่เลือกมาครับ 
-            $folderName ="myimages";
+            $folderName = $_GET["sid"].'_'.$_GET["listId"].'_'.$casetitle;
+            //del
+            //$folderName ="myimages";
             ?>
             <hr />
             <h4 class="text-center mt-2 p-b-3"> <?= $station["stationName"]?> / <?=$rows["station_title"]?> <br />
@@ -75,14 +77,15 @@ include('config.php');
                     <div class="progress"></div>
                 </div>
                 <button onclick="uploadImage()" class="upload">Upload</button>
-                <span class="completeMsg"></span>
+                <span class="completeMsg text-success"></span>
                 <span class="loading">Loading...</span>
                 <div class="row w-100">
-                    <div class="images d-flex flex-row flex-wrap"></div>
+                    <div class="images- d-flex flex-row flex-wrap"></div>
                 </div>
             </div>
         </div>
     </div>
+    <div class="text-end"><?=$code?></div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
@@ -141,17 +144,19 @@ include('config.php');
                 image.style.display = "block";
                 image.setAttribute("src", url);
                 image.className = "img";
-                images.appendChild(image);
+                // showimages
+                /*images.appendChild(image);*/
             }
             if (i === files.length - 1) {
-                completeMsg.innerHTML = `${files.length} files uploaded successfully`;
+                completeMsg.innerHTML = '' +
+                    `${files.length} files uploaded successfully`;
             }
         }
     };
-    console.log(<?=$name?>);
+
     const uploadProcess = (file, fileName) => {
         return new Promise((resolve, reject) => {
-            // Folder on ferebase / myimages
+            // Chang Folder on ferebase / myimages
             const storageRef = storage.ref().child("<?=$folderName?>");
             const folderRef = storageRef.child(fileName);
             const uploadtask = folderRef.put(file);
@@ -171,7 +176,7 @@ include('config.php');
                 },
                 () => {
                     storage
-                        .ref("myimages")
+                        .ref("<?=$folderName?>")
                         .child(uploadedFileName)
                         .getDownloadURL()
                         .then((url) => {
